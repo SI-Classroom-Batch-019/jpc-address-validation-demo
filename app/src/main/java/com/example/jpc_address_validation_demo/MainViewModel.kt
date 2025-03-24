@@ -17,7 +17,6 @@ class MainViewModel: ViewModel() {
             try {
                 val results = Api.service.searchAddress(address)
                 if (results.isNotEmpty()) {
-                    Log.d("DEBUG", "results: $results")
                     _result.value = "Valid: ${results[0].display_name}"
                 } else {
                     _result.value = null
