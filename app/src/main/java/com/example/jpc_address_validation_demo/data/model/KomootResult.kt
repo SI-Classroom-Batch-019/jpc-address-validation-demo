@@ -22,7 +22,11 @@ data class Property(
     val osm_key: String = "",
     val osm_value: String = "",
     val osm_type: String = ""
-)
+) {
+    fun prettyPrint() : String {
+        return name + "\n" + street + " " + housenumber + "\n " + postcode + " " + city
+    }
+}
 
 /**
  * {

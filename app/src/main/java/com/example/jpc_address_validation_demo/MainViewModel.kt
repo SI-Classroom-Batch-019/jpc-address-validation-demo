@@ -1,7 +1,6 @@
 package com.example.jpc_address_validation_demo
 
 import android.util.Log
-import androidx.compose.material3.ModalBottomSheetDefaults.properties
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.jpc_address_validation_demo.data.remote.KomootApi
@@ -43,7 +42,7 @@ class MainViewModel: ViewModel() {
                     features.forEach {
                         Log.d("DEBUG", "feature.properties: ${it.properties}")
                     }
-                    _resultKomoot.value = "Valid: ${features.first().properties}"
+                    _resultKomoot.value = features.first().properties.prettyPrint()
                 } else {
                     _resultKomoot.value = null
                 }
