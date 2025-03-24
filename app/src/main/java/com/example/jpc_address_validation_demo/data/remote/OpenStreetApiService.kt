@@ -1,5 +1,6 @@
-package com.example.jpc_address_validation_demo
+package com.example.jpc_address_validation_demo.data.remote
 
+import com.example.jpc_address_validation_demo.data.model.NominatimResult
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
@@ -20,7 +21,7 @@ interface NominatimApiService {
     ): List<NominatimResult>
 }
 
-object Api {
+object OpenStreetApi {
     private const val BASE_URL = "https://nominatim.openstreetmap.org/"
     private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
     private val logger = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }

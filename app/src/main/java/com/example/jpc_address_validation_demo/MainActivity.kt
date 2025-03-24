@@ -47,8 +47,10 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AddressApp() {
     val mainViewModel: MainViewModel = viewModel()
-    val result = mainViewModel.result.collectAsState()
-    var valueAddress = remember { mutableStateOf("") }
+    val result = mainViewModel.resultOpenStreet.collectAsState()
+    val resultKomoot = mainViewModel.resultKomoot.collectAsState()
+    var valueOpenStreetAddress = remember { mutableStateOf("") }
+    var valueKomootAddress = remember { mutableStateOf("") }
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(
@@ -60,9 +62,9 @@ fun AddressApp() {
         content = {
             OutlinedTextField(
                 modifier = Modifier.padding(horizontal = 24.dp),
-                value = valueAddress.value,
+                value = valueOpenStreetAddress.value,
                 onValueChange = {
-                    valueAddress.value = it
+                    valueOpenStreetAddress.value = it
                 },
                 singleLine = true,
                 //textStyle = TextStyle(brush = brush),
@@ -70,7 +72,7 @@ fun AddressApp() {
                 // 2. Handle the action key press.
                 keyboardActions = KeyboardActions(
                     onSearch = {
-                        mainViewModel.validateAddress(valueAddress.value)
+                        mainViewModel.validateOpenStreetAddress(valueOpenStreetAddress.value)
                         keyboardController?.hide()
                     }
                 ),
@@ -79,18 +81,53 @@ fun AddressApp() {
                 },
                 trailingIcon = {
                     IconButton(
-                        onClick = { valueAddress.value = "" },
+                        onClick = { valueOpenStreetAddress.value = "" },
                         content = {
-                            if (valueAddress.value.isNotEmpty()) {
+                            if (valueOpenStreetAddress.value.isNotEmpty()) {
                                 Icon(Icons.Default.Close, Icons.Default.Close.name)
                             }
                         }
                     )
                 },
-                label = { Text("Suche…") },
+                label = { Text("OpenStreet Suche…") },
             )
             Spacer(modifier = Modifier.height(24.dp))
             Text(result.value ?: "Address not found or error" )
+
+            OutlinedTextField(
+                modifier = Modifier.padding(horizontal = 24.dp),
+                value = valueKomootAddress.value,
+                onValueChange = {
+                    valueKomootAddress.value = it
+                    mainViewModel.validateKomootAddress(it)
+                },
+                singleLine = true,
+                //textStyle = TextStyle(brush = brush),
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                // 2. Handle the action key press.
+                keyboardActions = KeyboardActions(
+                    onSearch = {
+                        mainViewModel.validateKomootAddress(valueKomootAddress.value)
+                        keyboardController?.hide()
+                    }
+                ),
+                leadingIcon = {
+                    Icon(Icons.Default.Search, Icons.Default.Search.name)
+                },
+                trailingIcon = {
+                    IconButton(
+                        onClick = { valueKomootAddress.value = "" },
+                        content = {
+                            if (valueKomootAddress.value.isNotEmpty()) {
+                                Icon(Icons.Default.Close, Icons.Default.Close.name)
+                            }
+                        }
+                    )
+                },
+                label = { Text("Komoot Suche…") },
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+            Text(resultKomoot.value ?: "Address not found or error" )
         }
     )
     Log.d("DEBUG", result.value ?: "Address not found or error")
